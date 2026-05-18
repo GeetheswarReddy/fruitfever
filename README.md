@@ -47,6 +47,12 @@ The two ESP32 boards have **separate roles** and **separate power**. They are li
 
 ---
 
+## Team
+
+FreshScan was built by **Geetheswar Reddy** and **Himanshu Sastry** as a final-year project. Himanshu led the IoT side and the ESP32-CAM firmware; the rest of the system was built jointly, with most design decisions and debugging done together.
+
+---
+
 ## Repository layout
 
 ```
@@ -101,13 +107,15 @@ A more detailed step-by-step (with the rotten-bypass logic and Blynk virtual pin
 
 ---
 
-## What I built
+## What we built
+
+The system spans embedded firmware, computer vision, regression modelling, cloud deployment, and a phone dashboard. Some pieces were owned individually, but most of the integration was joint work:
 
 - **Embedded firmware** for two ESP32 boards coordinating over UART, with non-blocking timers for sensor sampling, Blynk transmission (throttled ≥200 ms apart to respect free-tier flood limits), and camera scheduling.
-- **Inter-board protocol** — a tiny pipe-delimited line protocol (`FRUIT|RIPENESS\n`) so the Dev Board can stay sensor-focused while the CAM handles networking and vision.
+- **Inter-board protocol** — a tiny pipe-delimited line protocol (`FRUIT|RIPENESS\n`) so the Dev Board can stay sensor-focused while the CAM handles networking and vision. The split-of-responsibilities was a team design decision after we hit GPIO contention trying to do everything on one board.
 - **Cloud ML integration** — multipart image upload from a microcontroller to a Flask API on Render, with cold-start latency handling and graceful failure paths.
 - **Phone dashboard** — Blynk virtual pin mapping for live data + manual scan trigger + push notifications on the `spoiler_alert` event.
-- **Rotten-bypass logic** — when the CNN sees rotten fruit, the regression model is skipped entirely and shelf life is forced to 0 days. Catches the "sensors look fine but the fruit is visibly gone" case.
+- **Rotten-bypass logic** — when the CNN sees rotten fruit, the regression model is skipped entirely and shelf life is forced to 0 days. This caught the "sensors look fine but the fruit is visibly gone" case we kept hitting during testing, and the fix came out of a team review session.
 
 ---
 

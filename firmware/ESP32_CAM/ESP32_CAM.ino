@@ -17,7 +17,7 @@
  *  Partition: Huge APP (3MB No OTA / 1MB SPIFFS)
  *  PSRAM:    Disabled (project finding — improved frame-buffer stability)
  *
- *  Author: Geethu (Geetheswar Reddy)
+ *  Authors: Geetheswar Reddy & Himanshu Sastry
  *  License: MIT
  * ============================================================================
  */

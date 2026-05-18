@@ -13,7 +13,7 @@
  *  Companion ML API (Flask on Render):
  *    https://github.com/GeetheswarReddy/fresh_scan_api
  *
- *  Author: Geethu (Geetheswar Reddy)
+ *  Authors: Geetheswar Reddy & Himanshu Sastry
  *  License: MIT
  * ============================================================================
  */
