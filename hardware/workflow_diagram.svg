@@ -1,0 +1,104 @@
+<svg width="100%" viewBox="0 0 680 620" xmlns="http://www.w3.org/2000/svg" role="img">
+  <title>FreshScan scan cycle workflow</title>
+  <desc>End-to-end flow showing how a scan request travels from the Blynk app through the Dev Board, ESP32-CAM, ML API, and back to the user.</desc>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <style>
+      .t  { font-family: -apple-system, "Segoe UI", Arial, sans-serif; font-size: 14px; fill: #2C2C2A; }
+      .ts { font-family: -apple-system, "Segoe UI", Arial, sans-serif; font-size: 12px; fill: #5F5E5A; }
+      .th { font-family: -apple-system, "Segoe UI", Arial, sans-serif; font-size: 14px; font-weight: 500; fill: #2C2C2A; }
+      .step { font-family: "Menlo", Consolas, monospace; font-size: 11px; fill: #5F5E5A; }
+    </style>
+  </defs>
+
+  <text class="th" x="340" y="30" text-anchor="middle" style="font-size:16px">FreshScan — scan cycle workflow</text>
+  <text class="ts" x="340" y="48" text-anchor="middle">One end-to-end cycle: phone tap → cloud ML → buzzer + dashboard</text>
+
+  <!-- Step 1: User / Blynk -->
+  <rect x="40" y="80" width="200" height="60" rx="8" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
+  <text class="th" x="140" y="105" text-anchor="middle" fill="#26215C">1. User taps Scan Now</text>
+  <text class="ts" x="140" y="124" text-anchor="middle" fill="#3C3489">Blynk app · V9 button</text>
+
+  <!-- Arrow 1 -->
+  <line x1="240" y1="110" x2="440" y2="110" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text class="step" x="340" y="100" text-anchor="middle">Blynk MQTT</text>
+
+  <!-- Step 2: Dev Board -->
+  <rect x="440" y="80" width="200" height="60" rx="8" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+  <text class="th" x="540" y="105" text-anchor="middle" fill="#173404">2. ESP32 Dev Board</text>
+  <text class="ts" x="540" y="124" text-anchor="middle" fill="#3B6D11">Receives V9, triggers CAM</text>
+
+  <!-- Arrow 2 (down) -->
+  <line x1="540" y1="140" x2="540" y2="180" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text class="step" x="600" y="165" text-anchor="middle">UART</text>
+  <text class="step" x="600" y="178" text-anchor="middle">SCAN:Apple\n</text>
+
+  <!-- Step 3: CAM -->
+  <rect x="440" y="180" width="200" height="60" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text class="th" x="540" y="205" text-anchor="middle" fill="#042C53">3. ESP32-CAM</text>
+  <text class="ts" x="540" y="224" text-anchor="middle" fill="#185FA5">Warmup + JPEG capture</text>
+
+  <!-- Arrow 3 (left, to API) -->
+  <line x1="440" y1="210" x2="240" y2="210" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text class="step" x="340" y="200" text-anchor="middle">HTTPS POST multipart</text>
+  <text class="step" x="340" y="225" text-anchor="middle">fruit + JPEG bytes</text>
+
+  <!-- Step 4: Flask API -->
+  <rect x="40" y="180" width="200" height="60" rx="8" fill="#FAECE7" stroke="#993C1D" stroke-width="0.5"/>
+  <text class="th" x="140" y="205" text-anchor="middle" fill="#4A1B0C">4. Flask API (Render)</text>
+  <text class="ts" x="140" y="224" text-anchor="middle" fill="#993C1D">/analyse endpoint</text>
+
+  <!-- Arrow 4 (down) -->
+  <line x1="140" y1="240" x2="140" y2="280" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Step 5: CNN -->
+  <rect x="40" y="280" width="200" height="60" rx="8" fill="#FBEAF0" stroke="#993556" stroke-width="0.5"/>
+  <text class="th" x="140" y="305" text-anchor="middle" fill="#4B1528">5. MobileNetV2 CNN</text>
+  <text class="ts" x="140" y="324" text-anchor="middle" fill="#993556">Unripe · Ripe · Rotten</text>
+
+  <!-- Arrow 5 (down) -->
+  <line x1="140" y1="340" x2="140" y2="380" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text class="step" x="195" y="365">if Rotten → skip</text>
+
+  <!-- Step 6: Regression -->
+  <rect x="40" y="380" width="200" height="60" rx="8" fill="#FBEAF0" stroke="#993556" stroke-width="0.5"/>
+  <text class="th" x="140" y="405" text-anchor="middle" fill="#4B1528">6. Linear regression</text>
+  <text class="ts" x="140" y="424" text-anchor="middle" fill="#993556">shelf_life_days</text>
+
+  <!-- Arrow 6 (right, JSON response back to CAM) -->
+  <line x1="240" y1="410" x2="440" y2="410" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text class="step" x="340" y="400" text-anchor="middle">JSON response</text>
+  <text class="step" x="340" y="425" text-anchor="middle">{fruit, ripeness, days}</text>
+
+  <!-- Step 7: CAM forwards over UART -->
+  <rect x="440" y="380" width="200" height="60" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text class="th" x="540" y="405" text-anchor="middle" fill="#042C53">7. CAM parses + forwards</text>
+  <text class="ts" x="540" y="424" text-anchor="middle" fill="#185FA5">Apple|Ripe|3\n over UART</text>
+
+  <!-- Arrow 7 (down) -->
+  <line x1="540" y1="440" x2="540" y2="480" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Step 8: Dev Board updates outputs -->
+  <rect x="440" y="480" width="200" height="80" rx="8" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+  <text class="th" x="540" y="503" text-anchor="middle" fill="#173404">8. Dev Board updates</text>
+  <text class="ts" x="540" y="521" text-anchor="middle" fill="#3B6D11">LCD + Blynk V2/V3/V6/V7</text>
+  <text class="ts" x="540" y="537" text-anchor="middle" fill="#3B6D11">+ buzzer if shelf ≤ 1 day</text>
+
+  <!-- Arrow 8 (left, back to user) -->
+  <line x1="440" y1="520" x2="240" y2="520" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text class="step" x="340" y="510" text-anchor="middle">Push notification</text>
+  <text class="step" x="340" y="535" text-anchor="middle">spoiler_alert event</text>
+
+  <!-- Step 9: User sees result -->
+  <rect x="40" y="480" width="200" height="80" rx="8" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
+  <text class="th" x="140" y="503" text-anchor="middle" fill="#26215C">9. User sees result</text>
+  <text class="ts" x="140" y="521" text-anchor="middle" fill="#3C3489">Status, days, ripeness</text>
+  <text class="ts" x="140" y="537" text-anchor="middle" fill="#3C3489">on Blynk app + LCD</text>
+
+  <!-- Timing note -->
+  <rect x="200" y="585" width="280" height="25" rx="4" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+  <text class="ts" x="340" y="602" text-anchor="middle">Total: ~3–5 s warm · ~30–50 s on Render cold start</text>
+</svg>

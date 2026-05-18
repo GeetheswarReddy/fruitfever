@@ -1,0 +1,25 @@
+# Arduino / PlatformIO build output
+build/
+.pio/
+.pioenvs/
+.piolibdeps/
+*.elf
+*.bin
+*.hex
+*.map
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Secrets — never commit real credentials
+secrets.h
+*.local.h
+.env
+
+# OS
+*.log
