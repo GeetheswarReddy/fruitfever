@@ -136,6 +136,8 @@ The system spans embedded firmware, computer vision, regression modelling, cloud
 **Protocol:** UART Serial2 @ 9600 baud, pipe-delimited ASCII
 
 ---
+##Images
+<img width="1600" height="1204" alt="image" src="https://github.com/user-attachments/assets/54eb404f-c243-4172-a62c-58664d89b36b" />
 
 ## License
 
